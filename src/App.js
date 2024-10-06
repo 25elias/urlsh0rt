@@ -1,11 +1,21 @@
 import React from 'react'
+import Navbar from './components/Navbar';
+import Showcase from './components/Showcase';
+import Advanced from './components/Advanced';
+import Boost from './components/Boost';
+import Footer from './components/Footer';
 
 
 function App() {
   return (
-    <div >
-        This is a Url Shortner wecsite.
-    </div>
+    <>
+      <Navbar />
+      <Showcase />
+      <Showcase />
+      <Advanced />
+      <Boost />
+      <Footer />
+    </>
   );
 }
 
