@@ -1,67 +1,62 @@
-import { useState, useEffect } from "react";
-import bgDesktop from "../images/bg-shorten-desktop.svg";
-import bgMobile from "../images/bg-shorten-mobile.svg";
+import { useEffect, useState } from "react"
+import bgMobile from "../images/bg-shorten-mobile.svg"
+import bgDesktop from "../images/bg-shorten-desktop.svg"
 
 const getLocalStorage = () => {
-  let links = localStorage.getItem("links");
+  let links = localStorage.getItem("links")
 
   if (links) {
-    return JSON.parse(localStorage.getItem("links"));
+    return JSON.parse(localStorage.getItem("links"))
   } else {
-    return [];
+    return []
   }
-};
+}
 
-export default function Shortner() {
-  const [text, setText] = useState("");
-  const [links, setLinks] = useState(getLocalStorage());
-  const [buttonText, setButtonText] = useState("Copy");
+export default function Shortener() {
+  const [text, setText] = useState("")
+  const [links, setLinks] = useState(getLocalStorage())
+  const [buttonText, setButtonText] = useState("Copy")
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!text) {
-      alert("Input is empty!");
+      alert("Input is empty")
     } else {
       const shortenLink = async () => {
-        const res = await fetch(
-          `https://s.squizee.in/short/formResponse?url=${text}&email=&format=json`
-        );
-        const data = await res.json();
-        console.log(data); //check for result in the console
-        setLinks(data);
-        setText("");
-      };
-      shortenLink();
+        const res = await fetch(`https://ulvis.net/API/write/get?url=${links.full}`)
+        const data = await res.json()
+        console.log(data)//check for 'res' in the console
+        setLinks(data)
+        setText("")
+      }
+
+      shortenLink()
     }
-  };
+  }
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(links);
-    setButtonText("Copied");
-  };
+    navigator.clipboard.writeText(links.url)
+    setButtonText("Copied!")
+  }
 
   useEffect(() => {
-    if (localStorage.getItem("exampleData")) {
-      setLinks(JSON.parse(localStorage.getItem("exampleData")));
-    }
-  }, []);
-  useEffect(() => {
-    localStorage.setItem("links", JSON.stringify(links));
-  }, [links]);
+    localStorage.setItem("links", JSON.stringify(links))
+  }, [links])
 
   return (
     <>
-      <section className="max-width shortner relative">
+      <section className="max-width shortener relative">
         <picture>
           <source media="(min-width: 768px)" srcSet={bgDesktop} />
-          <img src={bgMobile} alt="/" />
+          <img src={bgMobile} alt="" />
         </picture>
-        <form className="form" onChange={handleSubmit}>
+
+        <form className="form" onSubmit={handleSubmit}>
           <div className="flex flex-col md:flex-row">
             <input
               type="url"
-              placeholder="Shorten link here"
+              placeholder="Shorten a link here"
               className="w-full py-2 px-5 rounded-lg mb-2 md:mb-0 md:w-2/3"
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -71,7 +66,7 @@ export default function Shortner() {
               className="btn-cta rounded-lg w-full md:w-40 md:ml-5"
               onClick={handleSubmit}
             >
-              Shorten It
+              Shorten It!
             </button>
           </div>
         </form>
@@ -85,14 +80,13 @@ export default function Shortner() {
             <ul className="md:flex md:items-center">
               <li className="md:mr-5">
                 <button className="text-cyan-500">
-                  {links.data.shortened_url}
+                  {links.full}
                 </button>
               </li>
               <li>
                 <button
                   onClick={handleCopy}
-                  className="btn-cta rounded-lg text-sm focus:bg-slate-800
-                        "
+                  className="btn-cta rounded-lg text-sm focus:bg-slate-800"
                 >
                   {buttonText}
                 </button>
@@ -102,5 +96,5 @@ export default function Shortner() {
         </div>
       </section>
     </>
-  );
+  )
 }
